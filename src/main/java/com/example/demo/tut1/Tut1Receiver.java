@@ -3,7 +3,7 @@ package com.example.demo.tut1;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 
-@RabbitListener(queues = "hello")
+@RabbitListener(queues = "helloBelin")
 public class Tut1Receiver {
 
     @RabbitHandler
