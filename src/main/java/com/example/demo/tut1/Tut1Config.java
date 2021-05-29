@@ -14,6 +14,9 @@ public class Tut1Config {
         return new Queue("helloBelin");
     }
 
+    
+    String queueName;
+
     @Profile("receiver")
     @Bean
     public Tut1Receiver receiver() {
