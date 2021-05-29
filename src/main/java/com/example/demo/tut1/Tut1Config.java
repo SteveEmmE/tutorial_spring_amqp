@@ -5,13 +5,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+
 @Profile({"tut1","hello-world"})
 @Configuration
 public class Tut1Config {
 
-    @Bean
+    @Bean("hello")
     public Queue hello() {
         return new Queue("hello");
+    }
+
+    @Bean("helloBelin")
+    public Queue helloBelin() {
+        return new Queue("helloBelin");
     }
 
     @Profile("receiver")
