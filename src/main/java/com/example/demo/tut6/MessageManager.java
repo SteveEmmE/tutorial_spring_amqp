@@ -37,14 +37,14 @@ public class MessageManager {
      * @param delayTime
      */
     public void createQueueAndSend( String message)  throws AmqpException {
-
+        System.out.println("Sender");
         String queueName = "mario";
         Queue queue = new Queue(queueName);
         addQueue(queue);
         addBinding(queue, topic, "*."+queueName);
 
         rabbitTemplate.convertAndSend(topic.getName(), "saluti.mario" , message.getBytes());
-
+        System.out.println(message);
     }
 
     /**
@@ -67,6 +67,16 @@ public class MessageManager {
     private void addBinding(Queue queue, TopicExchange exchange, String routingKey) {
         Binding binding = BindingBuilder.bind(queue).to(exchange).with(routingKey);
         rabbitAdmin.declareBinding(binding);
+    }
+
+    public void createQueueAndListen(String queueName) {
+        System.out.println("Listener");
+        Queue queue = new Queue(queueName);
+        addQueue(queue);
+        addBinding(queue, topic, "*.mario");
+        System.out.println("QUI");
+        String message = (String) rabbitTemplate.receiveAndConvert(queueName, 1000);
+        System.out.println(message);
     }
 
     
