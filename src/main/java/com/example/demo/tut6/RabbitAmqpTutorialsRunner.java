@@ -1,4 +1,5 @@
-package com.example.demo.tut1;
+package com.example.demo.tut6;
+
 
 import org.springframework.boot.CommandLineRunner;
 

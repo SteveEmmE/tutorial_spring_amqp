@@ -1,6 +1,6 @@
 package com.example.demo;
 
-import com.example.demo.tut1.RabbitAmqpTutorialsRunner;
+import com.example.demo.tut6.RabbitAmqpTutorialsRunner;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
