@@ -16,14 +16,24 @@ public class Controller {
     private Tut6Sender sender;
 
 
-    @GetMapping("/listener")
-    public void listen() {
-        receiver.receive();
+    /*@GetMapping("/listener")
+    public void listenAuth() {
+        //receiver.receiveAuth("1111","message");
+    }*/
+
+    @GetMapping("/sender/auth")
+    public void sendAuth() {
+        sender.sendAuth("1111", "meaaass");
     }
 
-    @GetMapping("/sender")
-    public void send() {
-        sender.send();
+   /* @GetMapping("/listener")
+    public void listenTask() {
+        receiver.receive();
+    }*/
+
+    @GetMapping("/sender/task")
+    public void sendTask() {
+        sender.sendTask("1111", "pppppp");
     }
 
 }

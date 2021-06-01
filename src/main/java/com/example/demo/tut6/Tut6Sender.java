@@ -12,7 +12,11 @@ public class Tut6Sender {
     @Autowired
     private MessageManager messageManager;
  
-    public void send() {
-        messageManager.createQueueAndSend((i++)+" saluti per mario");
+    public void sendAuth( String idDev, String message ) {
+        messageManager.bindingAuth(idDev, message);
+    }
+
+    public void sendTask( String idDev, String message ) {
+        messageManager.bindingTask(idDev, message);
     }
 }

@@ -30,12 +30,19 @@ public class MessageManager {
     @Resource
     private RabbitTemplate rabbitTemplate;
 
+    private String taskName = "TaskCar";
+
     @Autowired
-    private TopicExchange topic;
+    private TopicExchange taskManager;
 
     @Autowired
     private ConnectionFactory connectionFactory;
-    
+
+    @Autowired
+    private Queue task;
+
+    @Autowired
+    private Queue auth;
 
 
  // Creating Dynamic Queues and Switches
@@ -46,25 +53,22 @@ public class MessageManager {
      * @param object
      * @param delayTime
      */
-    public void createQueueAndSend( String message)  throws AmqpException {
+    public void bindingTask( String idDev, String message )  throws AmqpException {
         System.out.println("Sender");
-        String queueName = "mario";
-        Queue queue = new Queue(queueName);
-        addQueue(queue);
-        addBinding(queue, topic, "*."+queueName);
+        String routingKey =  taskName + ".control.task."+ idDev; 
+        addBinding(task, taskManager, routingKey);
 
-        rabbitTemplate.convertAndSend(topic.getName(), "saluti.mario" , message.getBytes());
+        rabbitTemplate.convertAndSend(taskManager.getName(), routingKey , message.getBytes());
         System.out.println(message);
     }
 
-    /**
-     * Create a specified Queue
-     *
-     * @param queue
-     * @return queueName
-     */
-    private String addQueue(Queue queue) {
-        return rabbitAdmin.declareQueue(queue);
+    public void bindingAuth( String idDev, String message )  throws AmqpException {
+        System.out.println("Sender");
+        String routingKey =  taskName + ".control.auth" + idDev; 
+        addBinding(auth, taskManager, routingKey);
+
+        rabbitTemplate.convertAndSend(taskManager.getName(), routingKey , message.getBytes());
+        System.out.println(message);
     }
 
     /**
@@ -79,10 +83,8 @@ public class MessageManager {
         rabbitAdmin.declareBinding(binding);
     }
 
-    public void createQueueAndListen(String queueName) {
+    /*public void createQueueAndListen(String queueName) {
         System.out.println("Listener");
-        Queue queue = new Queue(queueName);
-        addQueue(queue);
         addBinding(queue, topic, "*.mario");
         System.out.println("QUI");
 
@@ -96,8 +98,6 @@ public class MessageManager {
             @Override
             public void onMessage(Message message) {
                 System.out.println("Consuming Message - " + new String(message.getBody()));
-               
-                container.stop();
             }
             
         }); /* {
@@ -108,8 +108,8 @@ public class MessageManager {
                 container.destroy();
                 System.out.println("ehhmm dovrei aver stoppato il listener... però controlla bene..");
             }
-        })); */
-        container.start();
+        }));
+        container.start();*/
 
         
 
@@ -117,8 +117,9 @@ public class MessageManager {
 
 
        /*  byte[] rawData = (byte[]) rabbitTemplate.receiveAndConvert(queueName);
-        System.out.println(new String(rawData, StandardCharsets.UTF_8)); */
-    }
+        System.out.println(new String(rawData, StandardCharsets.UTF_8)); 
+    }*/
+
 
     
 

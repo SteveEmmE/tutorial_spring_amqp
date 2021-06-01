@@ -13,6 +13,7 @@ public class Tut6Receiver {
  
     
     public void receive() {
-        messageManager.createQueueAndListen("coda1");
+        //messageManager.createQueueAndListen("coda1");
+        messageManager.bindingAuth("message");
     }
 }
