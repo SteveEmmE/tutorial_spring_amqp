@@ -1,9 +1,9 @@
 package com.example.demo.tut6;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class Tut6Receiver {
 
     public static int i = 2;
