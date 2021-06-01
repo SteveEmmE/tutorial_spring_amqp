@@ -1,23 +1,15 @@
 package com.example.demo.tut6;
 
 
-
-import java.nio.charset.StandardCharsets;
-
 import javax.annotation.Resource;
 
 import org.springframework.amqp.AmqpException;
-import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,9 +26,6 @@ public class MessageManager {
 
     @Autowired
     private TopicExchange taskManager;
-
-    @Autowired
-    private ConnectionFactory connectionFactory;
 
     @Autowired
     private Queue task;

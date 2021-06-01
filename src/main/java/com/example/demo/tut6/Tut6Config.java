@@ -47,20 +47,22 @@ public class Tut6Config {
     public Queue task() {
         return new Queue("task");
     }
+    
+  /*   @Bean
+    public Binding authQueueBinding(TopicExchange taskManager,
+        Queue auth) {
+        return BindingBuilder.bind(auth)
+            .to(taskManager)
+            .with(taskName + ".result.auth.*");
+    } */
 
     @Bean
-    public Binding taskListener(TopicExchange taskManager,
+    public Binding taskQueueBinding(TopicExchange taskManager,
         Queue task) {
         return BindingBuilder.bind(task)
             .to(taskManager)
             .with(taskName + ".result.task.*");
     }
-
-    @Bean
-    public Binding authListener(TopicExchange taskManager,
-        Queue auth) {
-        return BindingBuilder.bind(auth)
-            .to(taskManager)
-            .with(taskName + ".result.auth.*");
-    }
 }
+
+    
