@@ -1,6 +1,8 @@
 package com.example.demo.tut6;
 
 
+import java.util.HashMap;
+
 import javax.annotation.Resource;
 
 import org.springframework.amqp.AmqpException;
@@ -28,10 +30,10 @@ public class MessageManager {
     private TopicExchange taskManager;
 
     @Autowired
-    private Queue task;
+    private HashMap<String, Queue> idsQueue;
 
     @Autowired
-    private Queue auth;
+    private HashMap<String, Binding> idsBinding;
 
 
  // Creating Dynamic Queues and Switches
@@ -45,12 +47,14 @@ public class MessageManager {
     public void bindingTask( String idDev, String message )  throws AmqpException {
         System.out.println("Sender");
         String routingKey =  taskName + ".control.task."+ idDev; 
-        addBinding(task, taskManager, routingKey);
+        idsQueue.put(idDev, new Queue(idDev));
+        addQueue(idsQueue.get(idDev));
+        addBinding(idsQueue.get(idDev), taskManager, routingKey);
 
         rabbitTemplate.convertAndSend(taskManager.getName(), routingKey , message.getBytes());
         System.out.println(message);
     }
-
+/* 
     public void bindingAuth( String idDev, String message )  throws AmqpException {
         System.out.println("Sender");
         String routingKey =  taskName + ".control.auth" + idDev; 
@@ -58,10 +62,10 @@ public class MessageManager {
 
         rabbitTemplate.convertAndSend(taskManager.getName(), routingKey , message.getBytes());
         System.out.println(message);
-    }
+    } */
 
     /**
-           * Bind a queue to a matching switch using a routingKey
+     * Bind a queue to a matching switch using a routingKey
      *
      * @param queue
      * @param exchange
@@ -70,6 +74,16 @@ public class MessageManager {
     private void addBinding(Queue queue, TopicExchange exchange, String routingKey) {
         Binding binding = BindingBuilder.bind(queue).to(exchange).with(routingKey);
         rabbitAdmin.declareBinding(binding);
+    }
+
+    /**
+     * Create a specified Queue
+     *
+     * @param queue
+     * @return queueName
+     */
+    private String addQueue(Queue queue) {
+        return rabbitAdmin.declareQueue(queue);
     }
 
     /*public void createQueueAndListen(String queueName) {

@@ -17,25 +17,19 @@ public class Tut6Receiver {
     private TopicExchange taskManager;
 
 
-    @RabbitListener(bindings = @QueueBinding(
-        value = @Queue(value = "auth"),
-        exchange = @Exchange(value = "#{taskManager.getName()}"),
-        key = "TaskCar.result.auth.*")
-    )
+    @RabbitListener(queues = "#{authRec.name}")
     public void receiveAuth(String in) throws InterruptedException {
         receive(in, 1);
     }
 
-    @RabbitListener(queues = "#{task.name}")
+    @RabbitListener(queues = "#{taskRec.name}")
     public void receiveTask(String in) throws InterruptedException {
         receive(in, 2);
     }
 
-    public void receive(String in, int receiver) throws
-        InterruptedException {
+    public void receive(String in, int receiver) throws InterruptedException {
 
-        System.out.println("instance " + receiver + " [x] Received '"
-            + in + "'");
+        System.out.println("instance " + receiver + " [x] Received '" + in + "'");
 
     }
 
