@@ -1,6 +1,8 @@
 package com.example.demo.tut6;
 
 
+import java.util.HashMap;
+
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -29,6 +31,16 @@ public class Tut6Config {
     }
 
     @Bean
+    public HashMap<String, Queue> idsQueue(){
+        return new HashMap<String, Queue>();
+    }
+
+    @Bean
+    public HashMap<String, Binding> idsBinding(){
+        return new HashMap<String, Binding>();
+    }
+
+    @Bean
     public RabbitAdmin rabbitAdmin( ) {
         return new RabbitAdmin(mqConnectionFactory());
     }
@@ -39,28 +51,30 @@ public class Tut6Config {
     }
 
     @Bean
-    public Queue auth() {
+    public Queue authRec() {
         return new Queue("auth");
     }
 
     @Bean
-    public Queue task() {
+    public Queue taskRec() {
         return new Queue("task");
     }
-
+    
     @Bean
-    public Binding taskListener(TopicExchange taskManager,
-        Queue task) {
-        return BindingBuilder.bind(task)
-            .to(taskManager)
-            .with(taskName + ".result.task.*");
-    }
-
-    @Bean
-    public Binding authListener(TopicExchange taskManager,
-        Queue auth) {
-        return BindingBuilder.bind(auth)
+    public Binding authQueueBinding(TopicExchange taskManager,
+        Queue authRec) {
+        return BindingBuilder.bind(authRec)
             .to(taskManager)
             .with(taskName + ".result.auth.*");
     }
+
+    @Bean
+    public Binding taskQueueBinding(TopicExchange taskManager,
+        Queue taskRec) {
+        return BindingBuilder.bind(taskRec)
+            .to(taskManager)
+            .with(taskName + ".result.task.*");
+    }
 }
+
+    

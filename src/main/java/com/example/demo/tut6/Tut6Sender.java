@@ -12,9 +12,9 @@ public class Tut6Sender {
     @Autowired
     private MessageManager messageManager;
  
-    public void sendAuth( String idDev, String message ) {
+   /*  public void sendAuth( String idDev, String message ) {
         messageManager.bindingAuth(idDev, message);
-    }
+    } */
 
     public void sendTask( String idDev, String message ) {
         messageManager.bindingTask(idDev, message);
