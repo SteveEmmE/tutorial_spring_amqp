@@ -40,6 +40,10 @@ public class Tut6Receiver {
     */
     public void receive(Dummy in, int receiver) throws InterruptedException {
         System.out.println("instance " + receiver + " [x] Received '" + in.toString() + "'");
+        if(in.getSaluto().equals("ciao"))
+            System.out.println("ciao");
+        else
+            System.out.println("altro saluto");
         
     }
 }
