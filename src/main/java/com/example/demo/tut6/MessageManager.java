@@ -18,13 +18,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageManager {
 
+    private String taskName = "TaskCar";
+
     @Resource
     RabbitAdmin rabbitAdmin;
 
-    @Resource
+    @Autowired
     private RabbitTemplate rabbitTemplate;
-
-    private String taskName = "TaskCar";
 
     @Autowired
     private TopicExchange taskManager;

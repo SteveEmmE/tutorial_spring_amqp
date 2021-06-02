@@ -3,6 +3,8 @@ package com.example.demo.tut6;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,13 +30,13 @@ public class Controller {
         sender.sendAuth("1111", "meaaass");
     } */
 
-   /* @GetMapping("/listener")
+    /*@GetMapping("/listener/task")
     public void listenTask() {
         receiver.receive();
     }*/
 
-    @GetMapping("/sender/task/{deviceId}")
-    public void sendTask(@PathVariable String deviceId, @RequestParam String message) {
+    @PostMapping("/sender/task/{deviceId}")
+    public void sendTask(@PathVariable String deviceId, @RequestBody String message) {
         sender.sendTask(deviceId, message);
     }
 }

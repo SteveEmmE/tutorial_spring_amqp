@@ -10,6 +10,8 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +28,6 @@ public class Tut6Config {
     @Bean("mqConnectionFactory")
     public ConnectionFactory mqConnectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory(rabbitHost);
-
         return connectionFactory;
     }
 
@@ -46,10 +47,24 @@ public class Tut6Config {
     }
 
     @Bean
+    public RabbitTemplate rabbitTemplate() {
+        RabbitTemplate template = new RabbitTemplate(mqConnectionFactory());
+        template.setMessageConverter(new Jackson2JsonMessageConverter());
+        return template;
+    }
+
+    /*
+    * *************** EXCHANGE
+    */
+    @Bean
     public TopicExchange taskManager() {
         return new TopicExchange("TaskManager");
     }
 
+
+    /*
+    * *************** QUEUE
+    */
     @Bean
     public Queue authRec() {
         return new Queue("auth");
@@ -60,6 +75,10 @@ public class Tut6Config {
         return new Queue("task");
     }
     
+
+    /*
+    * *************** BINDING
+    */
     @Bean
     public Binding authQueueBinding(TopicExchange taskManager,
         Queue authRec) {
@@ -75,6 +94,7 @@ public class Tut6Config {
             .to(taskManager)
             .with(taskName + ".result.task.*");
     }
+    
 }
 
     

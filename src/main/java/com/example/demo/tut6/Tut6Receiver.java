@@ -1,5 +1,8 @@
 package com.example.demo.tut6;
 
+import java.nio.charset.StandardCharsets;
+
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
@@ -18,20 +21,25 @@ public class Tut6Receiver {
 
 
     @RabbitListener(queues = "#{authRec.name}")
-    public void receiveAuth(String in) throws InterruptedException {
+    public void receiveAuth(Dummy in) throws InterruptedException {
         receive(in, 1);
     }
 
     @RabbitListener(queues = "#{taskRec.name}")
-    public void receiveTask(String in) throws InterruptedException {
+    public void receiveTask(Dummy in) throws InterruptedException {
         receive(in, 2);
     }
 
-    public void receive(String in, int receiver) throws InterruptedException {
-
-        System.out.println("instance " + receiver + " [x] Received '" + in + "'");
-
+    /*
+    * Auth
+    *   dev --> taskM
+    *       { "idDev": "1111", "passwordDev": "1234"}
+    * Task
+    *   taskM --> dev
+    *       { "idDev": "1111", "passwordDev": "1234", "devices":{"dev0": "0000", "dev1":"2222", ...}}
+    */
+    public void receive(Dummy in, int receiver) throws InterruptedException {
+        System.out.println("instance " + receiver + " [x] Received '" + in.toString() + "'");
+        
     }
-
-
 }
