@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MessageManager {
 
-    private String taskName = "TaskCar";
+    private String taskName = "CarTaskManager";
 
     @Resource
     RabbitAdmin rabbitAdmin;
@@ -35,34 +35,35 @@ public class MessageManager {
     @Autowired
     private HashMap<String, Binding> idsBinding;
 
+    @Autowired
+    private ControlMessage controlMessage;
+
 
  // Creating Dynamic Queues and Switches
 
 
     /**
      * Send delayed message
-     * @param object
-     * @param delayTime
      */
-    public void bindingTask( String idDev, String message )  throws AmqpException {
+    public void bindingControl( String idDev, ControlMessage message )  throws AmqpException {
         System.out.println("Sender");
-        String routingKey =  taskName + ".control.task."+ idDev; 
-        idsQueue.put(idDev, new Queue(idDev));
-        addQueue(idsQueue.get(idDev));
-        addBinding(idsQueue.get(idDev), taskManager, routingKey);
+        String routingKey;
+        if(message.getCommand().equals("Authenticate"))
+            routingKey =  /* taskName + ". */"control.auth."+ idDev; 
+        else
+            routingKey =  /* taskName + ". */"control.task."+ idDev; 
+        if(!idsQueue.containsKey(idDev)){
+            idsQueue.put(idDev, new Queue(idDev));
+            addQueue(idsQueue.get(idDev));
+            addBinding(idsQueue.get(idDev), taskManager, routingKey);
+        }
 
-        rabbitTemplate.convertAndSend(taskManager.getName(), routingKey , message.getBytes());
+
+        rabbitTemplate.convertAndSend(taskManager.getName(), routingKey, message);
         System.out.println(message);
     }
-/* 
-    public void bindingAuth( String idDev, String message )  throws AmqpException {
-        System.out.println("Sender");
-        String routingKey =  taskName + ".control.auth" + idDev; 
-        addBinding(auth, taskManager, routingKey);
 
-        rabbitTemplate.convertAndSend(taskManager.getName(), routingKey , message.getBytes());
-        System.out.println(message);
-    } */
+
 
     /**
      * Bind a queue to a matching switch using a routingKey
@@ -72,8 +73,8 @@ public class MessageManager {
      * @param routingKey
      */
     private void addBinding(Queue queue, TopicExchange exchange, String routingKey) {
-        Binding binding = BindingBuilder.bind(queue).to(exchange).with(routingKey);
-        rabbitAdmin.declareBinding(binding);
+        idsBinding.put(queue.getName(),BindingBuilder.bind(queue).to(exchange).with(routingKey));
+        rabbitAdmin.declareBinding(idsBinding.get(queue.getName()));
     }
 
     /**

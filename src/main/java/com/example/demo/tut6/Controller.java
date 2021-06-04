@@ -36,7 +36,7 @@ public class Controller {
     }*/
 
     @PostMapping("/sender/task/{deviceId}")
-    public void sendTask(@PathVariable String deviceId, @RequestBody String message) {
+    public void sendTask(@PathVariable String deviceId, @RequestBody ControlMessage message) {
         sender.sendTask(deviceId, message);
     }
 }

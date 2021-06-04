@@ -21,13 +21,13 @@ public class Tut6Receiver {
 
 
     @RabbitListener(queues = "#{authRec.name}")
-    public void receiveAuth(Dummy in) throws InterruptedException {
-        receive(in, 1);
+    public void receiveAuth(ResultAuthJson in) throws InterruptedException {
+        receiveAuth(in, 1);
     }
 
     @RabbitListener(queues = "#{taskRec.name}")
-    public void receiveTask(Dummy in) throws InterruptedException {
-        receive(in, 2);
+    public void receiveTask(ResultTaskJson in) throws InterruptedException {
+        receiveTask(in, 2);
     }
 
     /*
@@ -38,12 +38,15 @@ public class Tut6Receiver {
     *   taskM --> dev
     *       { "idDev": "1111", "passwordDev": "1234", "devices":{"dev0": "0000", "dev1":"2222", ...}}
     */
-    public void receive(Dummy in, int receiver) throws InterruptedException {
+    public void receiveAuth(ResultAuthJson in, int receiver) throws InterruptedException {
         System.out.println("instance " + receiver + " [x] Received '" + in.toString() + "'");
-        if(in.getSaluto().equals("ciao"))
-            System.out.println("ciao");
-        else
-            System.out.println("altro saluto");
+        
+        
+    }
+
+    public void receiveTask(ResultTaskJson in, int receiver) throws InterruptedException {
+        System.out.println("instance " + receiver + " [x] Received '" + in.toString() + "'");
+        
         
     }
 }

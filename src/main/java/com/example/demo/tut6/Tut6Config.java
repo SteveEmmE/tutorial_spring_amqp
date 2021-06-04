@@ -43,6 +43,11 @@ public class Tut6Config {
     }
 
     @Bean
+    public ControlMessage controlMessage(){
+        return new ControlMessage();
+    }
+
+    @Bean
     public RabbitAdmin rabbitAdmin( ) {
         return new RabbitAdmin(mqConnectionFactory());
     }
@@ -59,7 +64,7 @@ public class Tut6Config {
     */
     @Bean
     public TopicExchange taskManager() {
-        return new TopicExchange("TaskManager");
+        return new TopicExchange("CarTaskManager");
     }
 
 
@@ -68,12 +73,12 @@ public class Tut6Config {
     */
     @Bean
     public Queue authRec() {
-        return new Queue("auth");
+        return new Queue("authresp");
     }
 
     @Bean
     public Queue taskRec() {
-        return new Queue("task");
+        return new Queue("taskresp");
     }
 
     @Bean
@@ -90,7 +95,7 @@ public class Tut6Config {
         Queue authRec) {
         return BindingBuilder.bind(authRec)
             .to(taskManager)
-            .with(taskName + ".result.auth.*");
+            .with(/* taskName + ". */"result.auth.*");
     }
 
     @Bean
@@ -98,7 +103,7 @@ public class Tut6Config {
         Queue taskRec) {
         return BindingBuilder.bind(taskRec)
             .to(taskManager)
-            .with(taskName + ".result.task.*");
+            .with(/* taskName + ". */"result.task.*");
     }
     
 }
